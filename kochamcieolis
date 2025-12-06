@@ -1,0 +1,47 @@
+/public
+    index.html
+    style.css
+    script.js
+server.js
+package.json
+const express = require('express');
+const bodyParser = require('body-parser');
+const fs = require('fs');
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(express.static('public'));
+app.use(bodyParser.json());
+
+const FILE = 'comments.json';
+
+// Pobierz wszystkie komentarze
+app.get('/comments', (req, res) => {
+  const comments = JSON.parse(fs.readFileSync(FILE, 'utf8') || '[]');
+  res.json(comments);
+});
+
+// Dodaj nowy komentarz
+app.post('/comments', (req, res) => {
+  const comments = JSON.parse(fs.readFileSync(FILE, 'utf8') || '[]');
+  comments.push(req.body);
+  fs.writeFileSync(FILE, JSON.stringify(comments, null, 2));
+  res.json({status: 'ok'});
+});
+
+app.listen(PORT, () => console.log(`Server running on port ${async function loadComments() {
+  const res = await fetch('/comments');
+  const posts = await res.json();
+  renderPosts(posts);
+}
+
+async function addComment(comment) {
+  await fetch('/comments', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(comment)
+  });
+  loadComments();
+async function addComment(nick, text, img) {
+  await db.collection('comments').add({nick, text, img, date: Date.now()});
+  loadComments();
